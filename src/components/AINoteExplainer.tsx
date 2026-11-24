@@ -138,3 +138,4 @@ export const AINoteExplainer: React.FC<AINoteExplainerProps> = ({ note, currentL
     </div>
   );
 };
+
