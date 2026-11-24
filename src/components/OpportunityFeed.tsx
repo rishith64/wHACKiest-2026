@@ -1,22 +1,22 @@
 import React, { useState } from 'react';
-import { Opportunity, Language } from '../types';
+import type { Opportunity, Language, StudentProfile } from '../types';
 import { translations } from '../i18n/translations';
 import { 
   Building2, 
-  Calendar, 
   Clock, 
   ExternalLink, 
   Bell, 
-  CheckCircle2, 
   Briefcase, 
   GraduationCap, 
   Search,
-  Filter,
-  Check
+  Check,
+  Sparkles
 } from 'lucide-react';
+import { AIMatchModal } from './AIMatchModal';
 
 interface OpportunityFeedProps {
   opportunities: Opportunity[];
+  studentProfile: StudentProfile;
   currentLang: Language;
   onSetReminder: (opp: Opportunity) => void;
   existingReminderOppIds: Set<string>;
@@ -24,6 +24,7 @@ interface OpportunityFeedProps {
 
 export const OpportunityFeed: React.FC<OpportunityFeedProps> = ({
   opportunities,
+  studentProfile,
   currentLang,
   onSetReminder,
   existingReminderOppIds
@@ -31,6 +32,7 @@ export const OpportunityFeed: React.FC<OpportunityFeedProps> = ({
   const t = translations[currentLang];
   const [filterType, setFilterType] = useState<'all' | 'scholarship' | 'internship'>('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [analyzingOpp, setAnalyzingOpp] = useState<Opportunity | null>(null);
 
   const filteredOpportunities = opportunities.filter((opp) => {
     if (filterType !== 'all' && opp.type !== filterType) return false;
@@ -141,12 +143,15 @@ export const OpportunityFeed: React.FC<OpportunityFeedProps> = ({
                     )}
                   </span>
 
-                  {/* Profile Match Score */}
-                  {opp.matchScore && (
-                    <span className="flex items-center space-x-1 text-[11px] font-bold text-indigo-700 bg-indigo-50 border border-indigo-200/60 px-2 py-0.5 rounded-md">
-                      <span>🎯 {opp.matchScore}% {t.matchScoreText}</span>
-                    </span>
-                  )}
+                  {/* AI Eligibility Check Trigger Pill */}
+                  <button
+                    onClick={() => setAnalyzingOpp(opp)}
+                    className="flex items-center space-x-1 text-[11px] font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200/80 px-2.5 py-1 rounded-lg transition active:scale-95"
+                    title="Click for full AI Eligibility Analysis"
+                  >
+                    <Sparkles className="w-3 h-3 text-indigo-600" />
+                    <span>🎯 {opp.matchScore}% Match • AI Check</span>
+                  </button>
                 </div>
 
                 {/* Opportunity Title in Selected Language */}
@@ -243,6 +248,17 @@ export const OpportunityFeed: React.FC<OpportunityFeedProps> = ({
           );
         })}
       </div>
+
+      {/* Embedded AI Match Modal */}
+      {analyzingOpp && (
+        <AIMatchModal
+          opportunity={analyzingOpp}
+          profile={studentProfile}
+          currentLang={currentLang}
+          onClose={() => setAnalyzingOpp(null)}
+          onSetReminder={onSetReminder}
+        />
+      )}
 
     </div>
   );

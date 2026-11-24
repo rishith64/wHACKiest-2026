@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Language, Opportunity, Note, CustomReminder, StudentProfile } from './types';
+import type { Language, Opportunity, Note, CustomReminder, StudentProfile } from './types';
 import { seedOpportunities, seedNotes, defaultStudentProfile } from './data/mockData';
 import { translations } from './i18n/translations';
 import { Navbar } from './components/Navbar';
@@ -8,9 +8,8 @@ import { OpportunityFeed } from './components/OpportunityFeed';
 import { ReminderModal } from './components/ReminderModal';
 import { RemindersView } from './components/RemindersView';
 import { NotesHub } from './components/NotesHub';
-import { AdvisorBot } from './components/AdvisorBot';
 import { ProfileView } from './components/ProfileView';
-import { Compass, BookOpen, Bot, User, BellRing, Sparkles } from 'lucide-react';
+import { Compass, BookOpen, User, BellRing } from 'lucide-react';
 
 export function App() {
   // Persistence state
@@ -169,13 +168,12 @@ export function App() {
           </div>
         )}
 
-        {/* Desktop Tab Switcher */}
+        {/* Desktop Tab Switcher (4 Focused Tabs Matching Updated Flow) */}
         <div className="hidden sm:flex items-center space-x-2 mb-6 border-b border-slate-200 pb-3">
           {[
             { id: 'explore', label: t.navOpportunities, icon: Compass },
             { id: 'reminders', label: t.navReminders, icon: BellRing, count: reminders.length },
             { id: 'notes', label: t.navNotes, icon: BookOpen },
-            { id: 'advisor', label: t.navBot, icon: Bot },
             { id: 'profile', label: t.navProfile, icon: User },
           ].map((tab) => {
             const Icon = tab.icon;
@@ -208,6 +206,7 @@ export function App() {
         {activeTab === 'explore' && (
           <OpportunityFeed
             opportunities={opportunities}
+            studentProfile={profile}
             currentLang={currentLang}
             onSetReminder={(opp) => setSelectedOppForReminder(opp)}
             existingReminderOppIds={existingReminderOppIds}
@@ -229,13 +228,6 @@ export function App() {
             currentLang={currentLang}
             onRateNote={handleRateNote}
             onAddNote={handleAddNote}
-          />
-        )}
-
-        {activeTab === 'advisor' && (
-          <AdvisorBot
-            currentLang={currentLang}
-            onExploreScholarships={() => setActiveTab('explore')}
           />
         )}
 
@@ -269,7 +261,7 @@ export function App() {
 
       {/* Hackathon Footer Credit */}
       <footer className="mt-8 border-t border-slate-200 py-4 text-center text-xs text-slate-400 font-medium hidden sm:block">
-        UniQuest • UnlockED Hackathon • Built with ❤️ for Tier-3 College Students by Team Return 0 (Nelaturi Rishith Reddy, Rutvik, Aaditi, Vaishali)
+        UniQuest • UnlockED Hackathon • Built with ❤️ for Tier-3 College Students by Team Return 0
       </footer>
 
     </div>

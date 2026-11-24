@@ -1,6 +1,6 @@
 import React from 'react';
-import { Compass, BookOpen, Bot, User, BellRing } from 'lucide-react';
-import { Language } from '../types';
+import { Compass, BookOpen, User, BellRing } from 'lucide-react';
+import type { Language } from '../types';
 import { translations } from '../i18n/translations';
 
 interface BottomNavProps {
@@ -22,13 +22,12 @@ export const BottomNav: React.FC<BottomNavProps> = ({
     { id: 'explore', label: t.navOpportunities, icon: Compass },
     { id: 'reminders', label: t.navReminders, icon: BellRing, badge: remindersBadgeCount },
     { id: 'notes', label: t.navNotes, icon: BookOpen },
-    { id: 'advisor', label: t.navBot, icon: Bot },
     { id: 'profile', label: t.navProfile, icon: User },
   ];
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 pb-safe sm:hidden">
-      <div className="grid grid-cols-5 h-16">
+      <div className="grid grid-cols-4 h-16">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -50,7 +49,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
                   </span>
                 ) : null}
               </div>
-              <span className="text-[10px] mt-1 tracking-tight truncate max-w-[64px]">
+              <span className="text-[11px] mt-1 tracking-tight truncate max-w-[70px]">
                 {tab.label}
               </span>
               {isActive && (

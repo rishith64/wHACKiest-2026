@@ -120,3 +120,4 @@ export const RemindersView: React.FC<RemindersViewProps> = ({
     </div>
   );
 };
+

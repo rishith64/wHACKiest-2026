@@ -1,21 +1,19 @@
 import React, { useState } from 'react';
-import { Note, Language } from '../types';
+import type { Note, Language } from '../types';
 import { translations } from '../i18n/translations';
 import { 
   BookOpen, 
   Search, 
   Star, 
   Download, 
-  FileText, 
   Upload, 
   Eye, 
   X, 
   Check, 
-  ThumbsUp, 
-  GraduationCap,
   Sparkles
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { AINoteExplainer } from './AINoteExplainer';
 
 interface NotesHubProps {
   notes: Note[];
@@ -54,7 +52,6 @@ export const NotesHub: React.FC<NotesHubProps> = ({
 
   const handleDownload = (note: Note) => {
     setDownloadSuccessNoteId(note.id);
-    // Create a real text/markdown blob for the user to download as simulated verified note
     const blob = new Blob([note.fullContent], { type: 'text/markdown;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -79,7 +76,7 @@ export const NotesHub: React.FC<NotesHubProps> = ({
         <div>
           <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-bold mb-2">
             <BookOpen className="w-3.5 h-3.5" />
-            <span>Cross-College Notes Repository</span>
+            <span>Cross-College Notes Repository • AI Augmented</span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-black tracking-tight">
             {t.notesTitle}
@@ -201,7 +198,7 @@ export const NotesHub: React.FC<NotesHubProps> = ({
                 className="flex-1 flex items-center justify-center space-x-1.5 py-2.5 px-3 rounded-xl text-xs font-bold bg-indigo-50 hover:bg-indigo-100 text-indigo-700 transition active:scale-95"
               >
                 <Eye className="w-3.5 h-3.5" />
-                <span>{t.readNote}</span>
+                <span>{t.readNote} & AI Digest</span>
               </button>
 
               <button
@@ -226,10 +223,10 @@ export const NotesHub: React.FC<NotesHubProps> = ({
         ))}
       </div>
 
-      {/* Reader Modal */}
+      {/* Reader Modal with Embedded AI Explainer */}
       {readingNote && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in">
-          <div className="bg-white w-full max-w-2xl rounded-3xl p-6 shadow-2xl border border-slate-100 max-h-[85vh] flex flex-col relative">
+          <div className="bg-white w-full max-w-2xl rounded-3xl p-6 shadow-2xl border border-slate-100 max-h-[85vh] flex flex-col relative space-y-4">
             
             <button
               onClick={() => setReadingNote(null)}
@@ -238,7 +235,7 @@ export const NotesHub: React.FC<NotesHubProps> = ({
               <X className="w-5 h-5" />
             </button>
 
-            <div className="mb-4 pr-8">
+            <div className="pr-8">
               <div className="text-xs font-bold uppercase tracking-wider text-indigo-600">
                 {readingNote.subject} • {readingNote.college}
               </div>
@@ -247,13 +244,16 @@ export const NotesHub: React.FC<NotesHubProps> = ({
               </h3>
             </div>
 
+            {/* Smart AI Explainer & Exam Predictor embedded directly */}
+            <AINoteExplainer note={readingNote} currentLang={currentLang} />
+
             {/* Note Full Content Body */}
             <div className="flex-1 overflow-y-auto p-4 bg-slate-50 rounded-2xl border border-slate-200 font-mono text-xs text-slate-800 leading-relaxed whitespace-pre-wrap">
               {readingNote.fullContent}
             </div>
 
             {/* Modal Bottom: Star Rating */}
-            <div className="pt-4 mt-4 border-t border-slate-200 flex items-center justify-between">
+            <div className="pt-3 border-t border-slate-200 flex items-center justify-between">
               <div className="flex items-center space-x-1.5">
                 <span className="text-xs font-bold text-slate-600 mr-2">Rate this note:</span>
                 {[1, 2, 3, 4, 5].map((star) => (
@@ -312,8 +312,8 @@ const UploadModal: React.FC<{
 }> = ({ currentLang, onClose, onAddNote }) => {
   const [title, setTitle] = useState('');
   const [subject, setSubject] = useState('Operating Systems');
-  const [college, setCollege] = useState('Sir M Visvesvaraya Institute of Technology');
-  const [author, setAuthor] = useState('Rishith Reddy');
+  const [college] = useState('Sir M Visvesvaraya Institute of Technology');
+  const [author] = useState('Nelaturi Rishith Reddy');
   const [language, setLanguage] = useState<Language>(currentLang);
   const [content, setContent] = useState('');
 
