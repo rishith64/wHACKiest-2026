@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import type { Language, Opportunity, Note, CustomReminder, StudentProfile } from './types';
 import { seedOpportunities, seedNotes, defaultStudentProfile } from './data/mockData';
 import { translations } from './i18n/translations';
+import { InteractiveGridBackground } from './components/InteractiveGridBackground';
 import { Navbar } from './components/Navbar';
 import { BottomNav } from './components/BottomNav';
 import { OpportunityFeed } from './components/OpportunityFeed';
@@ -12,7 +13,6 @@ import { ProfileView } from './components/ProfileView';
 import { Compass, BookOpen, User, BellRing } from 'lucide-react';
 
 export function App() {
-  // Persistence state
   const [currentLang, setCurrentLang] = useState<Language>(() => {
     return (localStorage.getItem('uniquest_lang') as Language) || 'en';
   });
@@ -52,7 +52,6 @@ export function App() {
 
   const [selectedOppForReminder, setSelectedOppForReminder] = useState<Opportunity | null>(null);
 
-  // Network & PWA status
   const [isOnline, setIsOnline] = useState<boolean>(navigator.onLine);
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [canInstallPwa, setCanInstallPwa] = useState(false);
@@ -144,8 +143,11 @@ export function App() {
   const t = translations[currentLang];
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col font-sans pb-20 sm:pb-8 selection:bg-indigo-500 selection:text-white">
+    <div className="min-h-screen bg-black text-zinc-100 flex flex-col font-sans pb-20 sm:pb-8 selection:bg-white selection:text-black relative">
       
+      {/* Interactive Physics Grid Canvas Background + Floating Controls */}
+      <InteractiveGridBackground />
+
       {/* Top Navigation */}
       <Navbar
         currentLang={currentLang}
@@ -158,18 +160,18 @@ export function App() {
       />
 
       {/* Main Container */}
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 pt-5 sm:pt-7 flex-1 w-full">
+      <main className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 pt-5 sm:pt-7 flex-1 w-full">
         
         {/* Offline Notification Banner */}
         {!isOnline && (
-          <div className="mb-5 p-3.5 bg-amber-500 text-white rounded-2xl text-xs font-bold flex items-center justify-between shadow-md">
+          <div className="mb-5 p-3.5 glass-box text-amber-200 rounded-2xl text-xs font-medium flex items-center justify-between">
             <span>⚡ {t.offlineBanner}</span>
-            <span className="text-[10px] uppercase bg-black/20 px-2 py-0.5 rounded">PWA Cache Ready</span>
+            <span className="text-[10px] uppercase bg-white/10 px-2 py-0.5 rounded border border-white/15">PWA Cache Ready</span>
           </div>
         )}
 
-        {/* Desktop Tab Switcher (4 Focused Tabs Matching Updated Flow) */}
-        <div className="hidden sm:flex items-center space-x-2 mb-6 border-b border-slate-200 pb-3">
+        {/* Desktop Tab Switcher */}
+        <div className="hidden sm:flex items-center space-x-2.5 mb-6 border-b border-white/10 pb-3.5">
           {[
             { id: 'explore', label: t.navOpportunities, icon: Compass },
             { id: 'reminders', label: t.navReminders, icon: BellRing, count: reminders.length },
@@ -182,17 +184,15 @@ export function App() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition ${
-                  isActive
-                    ? 'bg-indigo-600 text-white shadow-sm'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                className={`flex items-center space-x-2 px-4 py-2 rounded-full text-xs sm:text-sm font-medium tactile-btn ${
+                  isActive ? 'tactile-btn-active' : ''
                 }`}
               >
                 <Icon className="w-4 h-4" />
                 <span>{tab.label}</span>
                 {tab.count !== undefined && tab.count > 0 && (
-                  <span className={`px-1.5 py-0.2 rounded-full text-[10px] ${
-                    isActive ? 'bg-indigo-800 text-white' : 'bg-slate-200 text-slate-700'
+                  <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-semibold ${
+                    isActive ? 'bg-white text-black' : 'bg-white/15 text-zinc-200'
                   }`}>
                     {tab.count}
                   </span>
@@ -260,8 +260,8 @@ export function App() {
       )}
 
       {/* Hackathon Footer Credit */}
-      <footer className="mt-8 border-t border-slate-200 py-4 text-center text-xs text-slate-400 font-medium hidden sm:block">
-        UniQuest • UnlockED Hackathon • Built with ❤️ for Tier-3 College Students by Team Return 0
+      <footer className="relative z-10 mt-8 border-t border-white/10 py-4 text-center text-xs text-zinc-500 font-normal hidden sm:block">
+        UniQuest • UnlockED Hackathon • Built for Tier-3 College Students by Team Return 0
       </footer>
 
     </div>

@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta name="theme-color" content="#4f46e5" />
+    <meta name="theme-color" content="#000000" />
     <meta name="description" content="UniQuest - Find internships, scholarships, and regional notes. Never miss a deadline." />
     
     <!-- PWA Manifest & Apple Touch -->
@@ -16,11 +16,10 @@
 
     <title>UniQuest - UnlockED Opportunities</title>
   </head>
-  <body class="bg-slate-50 text-slate-900 min-h-screen">
+  <body class="bg-black text-zinc-100 min-h-screen">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     <script>
-      // Register service worker for offline capabilities and PWA
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
           navigator.serviceWorker.register('/sw.js').then(

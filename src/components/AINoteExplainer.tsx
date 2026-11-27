@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Note, Language } from '../types';
-import { Sparkles, BrainCircuit, RefreshCw, Copy, Check } from 'lucide-react';
+import type { Note, Language } from '../types';
+import { Sparkles, Copy, Check } from 'lucide-react';
 
 interface AINoteExplainerProps {
   note: Note;
@@ -8,11 +8,9 @@ interface AINoteExplainerProps {
 }
 
 export const AINoteExplainer: React.FC<AINoteExplainerProps> = ({ note, currentLang }) => {
-  const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
   const [viewMode, setViewMode] = useState<'summary' | 'questions'>('summary');
 
-  // Multi-lingual simulated summaries & exam questions for notes
   const getAIContent = () => {
     if (currentLang === 'kn') {
       return {
@@ -69,19 +67,19 @@ export const AINoteExplainer: React.FC<AINoteExplainerProps> = ({ note, currentL
   };
 
   return (
-    <div className="bg-gradient-to-br from-indigo-50/80 via-white to-purple-50/50 rounded-2xl p-4 border border-indigo-200/80 shadow-sm space-y-3">
+    <div className="glass-inner rounded-2xl p-4 space-y-3">
       
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
-          <div className="w-7 h-7 rounded-lg bg-indigo-600 text-white flex items-center justify-center shadow-sm">
+          <div className="w-7 h-7 rounded-lg glass-inner text-sky-300 flex items-center justify-center">
             <Sparkles className="w-3.5 h-3.5" />
           </div>
           <div>
-            <h4 className="text-xs font-bold text-slate-900">
+            <h4 className="text-xs font-semibold text-white">
               Sarvam AI Smart Study Assistant
             </h4>
-            <p className="text-[10px] text-slate-500">
+            <p className="text-[10px] text-zinc-400">
               Multilingual instant summary & exam questions
             </p>
           </div>
@@ -90,16 +88,16 @@ export const AINoteExplainer: React.FC<AINoteExplainerProps> = ({ note, currentL
         <div className="flex items-center space-x-1.5">
           <button
             onClick={() => setViewMode(viewMode === 'summary' ? 'questions' : 'summary')}
-            className="px-2 py-1 rounded-lg text-[10px] font-bold bg-indigo-100 text-indigo-700 hover:bg-indigo-200 transition"
+            className="px-3 py-1 rounded-full text-[10px] font-medium tactile-btn"
           >
             {viewMode === 'summary' ? "Show Exam Questions" : "Show Summary"}
           </button>
           <button
             onClick={handleCopy}
-            className="p-1 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100 transition"
+            className="p-1.5 text-zinc-400 hover:text-white rounded-full hover:bg-white/10 transition"
             title="Copy summary"
           >
-            {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+            {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
           </button>
         </div>
       </div>
@@ -107,16 +105,16 @@ export const AINoteExplainer: React.FC<AINoteExplainerProps> = ({ note, currentL
       {/* Content */}
       {viewMode === 'summary' ? (
         <div className="space-y-2 text-xs">
-          <p className="text-slate-700 leading-relaxed font-medium">
+          <p className="text-zinc-200 leading-relaxed font-normal">
             {aiContent.summary}
           </p>
           <div className="space-y-1 pt-1">
-            <div className="text-[10px] font-bold uppercase tracking-wider text-indigo-700">
+            <div className="text-[10px] font-medium uppercase tracking-wider text-sky-300">
               Key Highlights:
             </div>
             {aiContent.keyTakeaways.map((point, idx) => (
-              <div key={idx} className="flex items-start space-x-1.5 text-[11px] text-slate-600">
-                <span className="text-indigo-500 font-bold">•</span>
+              <div key={idx} className="flex items-start space-x-1.5 text-[11px] text-zinc-300">
+                <span className="text-sky-300 font-bold">•</span>
                 <span>{point}</span>
               </div>
             ))}
@@ -124,11 +122,11 @@ export const AINoteExplainer: React.FC<AINoteExplainerProps> = ({ note, currentL
         </div>
       ) : (
         <div className="space-y-1.5 text-xs">
-          <div className="text-[10px] font-bold uppercase tracking-wider text-purple-700">
+          <div className="text-[10px] font-medium uppercase tracking-wider text-sky-300">
             Top Exam Questions Predicted:
           </div>
           {aiContent.examQuestions.map((q, idx) => (
-            <div key={idx} className="p-2 bg-white rounded-lg border border-purple-100 text-[11px] font-medium text-slate-800">
+            <div key={idx} className="p-2.5 glass-inner rounded-lg text-[11px] font-normal text-zinc-200">
               {q}
             </div>
           ))}
@@ -138,4 +136,3 @@ export const AINoteExplainer: React.FC<AINoteExplainerProps> = ({ note, currentL
     </div>
   );
 };
-

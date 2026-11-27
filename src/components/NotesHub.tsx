@@ -9,8 +9,7 @@ import {
   Upload, 
   Eye, 
   X, 
-  Check, 
-  Sparkles
+  Check
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { AINoteExplainer } from './AINoteExplainer';
@@ -35,7 +34,6 @@ export const NotesHub: React.FC<NotesHubProps> = ({
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [downloadSuccessNoteId, setDownloadSuccessNoteId] = useState<string | null>(null);
 
-  // Filter notes
   const filteredNotes = notes.filter((note) => {
     if (selectedLanguageFilter !== 'all' && note.language !== selectedLanguageFilter) return false;
     if (searchQuery.trim() !== '') {
@@ -72,23 +70,23 @@ export const NotesHub: React.FC<NotesHubProps> = ({
     <div className="space-y-6">
       
       {/* Header Banner */}
-      <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="glass-box rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-bold mb-2">
-            <BookOpen className="w-3.5 h-3.5" />
+          <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full glass-inner text-zinc-300 text-xs font-medium mb-2">
+            <BookOpen className="w-3.5 h-3.5 text-zinc-400" />
             <span>Cross-College Notes Repository • AI Augmented</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-black tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-white">
             {t.notesTitle}
           </h2>
-          <p className="text-slate-300 text-sm mt-1 max-w-xl">
+          <p className="text-zinc-300 text-sm mt-1 max-w-xl">
             {t.notesSubtitle}
           </p>
         </div>
 
         <button
           onClick={() => setShowUploadModal(true)}
-          className="self-start md:self-center flex items-center space-x-2 px-5 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-md shadow-indigo-900 active:scale-95 transition"
+          className="self-start md:self-center flex items-center space-x-2 px-5 py-3 rounded-full text-xs font-medium tactile-btn"
         >
           <Upload className="w-4 h-4" />
           <span>{t.uploadNote}</span>
@@ -96,21 +94,21 @@ export const NotesHub: React.FC<NotesHubProps> = ({
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200/80 space-y-4">
+      <div className="glass-box rounded-2xl p-4 sm:p-5 space-y-4">
         <div className="relative">
-          <Search className="w-5 h-5 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+          <Search className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search notes by subject (OS, DBMS, DSA), college, or keywords..."
-            className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition"
+            className="w-full pl-11 pr-4 py-2.5 glass-inner rounded-xl text-sm font-normal text-white placeholder-zinc-500 focus:outline-none focus:border-white/35 transition"
           />
         </div>
 
-        <div className="flex items-center justify-between flex-wrap gap-2 pt-1 border-t border-slate-100">
-          <div className="flex items-center space-x-2">
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+        <div className="flex items-center justify-between flex-wrap gap-2 pt-2 border-t border-white/10">
+          <div className="flex items-center space-x-2 flex-wrap gap-y-1">
+            <span className="text-xs font-medium text-zinc-400 uppercase tracking-wider">
               Language:
             </span>
             {[
@@ -122,10 +120,8 @@ export const NotesHub: React.FC<NotesHubProps> = ({
               <button
                 key={lang.id}
                 onClick={() => setSelectedLanguageFilter(lang.id as any)}
-                className={`px-3 py-1 rounded-lg text-xs font-semibold transition ${
-                  selectedLanguageFilter === lang.id
-                    ? 'bg-indigo-600 text-white shadow-sm'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                className={`px-3.5 py-1.5 rounded-full text-xs font-medium tactile-btn ${
+                  selectedLanguageFilter === lang.id ? 'tactile-btn-active' : ''
                 }`}
               >
                 {lang.label}
@@ -133,8 +129,8 @@ export const NotesHub: React.FC<NotesHubProps> = ({
             ))}
           </div>
 
-          <div className="text-xs text-slate-500 font-medium">
-            {filteredNotes.length} notes available
+          <div className="text-xs text-zinc-400 font-normal">
+            <span className="text-white font-medium">{filteredNotes.length}</span> notes available
           </div>
         </div>
       </div>
@@ -144,58 +140,58 @@ export const NotesHub: React.FC<NotesHubProps> = ({
         {filteredNotes.map((note) => (
           <div
             key={note.id}
-            className="bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md transition p-5 flex flex-col justify-between"
+            className="glass-box rounded-2xl p-5 flex flex-col justify-between group"
           >
             <div>
               
               {/* Badges */}
-              <div className="flex items-center justify-between mb-2">
-                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-indigo-50 text-indigo-700 border border-indigo-200">
+              <div className="flex items-center justify-between mb-3">
+                <span className="px-2.5 py-0.5 rounded-full text-[11px] font-medium glass-inner text-sky-200">
                   {note.subject} • Sem {note.semester}
                 </span>
 
                 {/* Rating badge */}
-                <div className="flex items-center space-x-1 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-md text-amber-700 font-bold text-xs">
-                  <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                <div className="flex items-center space-x-1 glass-inner px-2.5 py-0.5 rounded-full text-zinc-100 font-medium text-xs">
+                  <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
                   <span>{note.rating.toFixed(1)}</span>
-                  <span className="text-[10px] text-amber-600/70 font-normal">
+                  <span className="text-[10px] text-zinc-400 font-normal">
                     ({note.ratingCount})
                   </span>
                 </div>
               </div>
 
               {/* Title */}
-              <h3 className="text-base font-bold text-slate-900 hover:text-indigo-600 transition leading-snug">
+              <h3 className="text-base font-semibold text-white tracking-tight leading-snug">
                 {note.title}
               </h3>
 
               {/* College & Contributor */}
-              <div className="text-xs text-slate-500 mt-2 space-y-0.5 font-medium">
-                <div>From: <strong className="text-slate-700">{note.college}</strong></div>
-                <div>Uploaded by: <span className="text-indigo-600">{note.uploadedBy}</span></div>
+              <div className="text-xs text-zinc-400 mt-2 space-y-0.5 font-normal">
+                <div>From: <span className="text-zinc-200">{note.college}</span></div>
+                <div>Uploaded by: <span className="text-sky-200">{note.uploadedBy}</span></div>
               </div>
 
               {/* Preview Snippet */}
-              <p className="mt-3 text-xs text-slate-600 bg-slate-50 p-3 rounded-xl border border-slate-100 line-clamp-3">
+              <p className="mt-3 text-xs text-zinc-300 glass-inner p-3 rounded-xl line-clamp-3 leading-relaxed">
                 {note.previewSnippet}
               </p>
 
               {/* Metadata */}
-              <div className="flex items-center space-x-3 text-[11px] text-slate-400 font-medium mt-3">
-                <span>📄 {note.pages} pages</span>
+              <div className="flex items-center space-x-3 text-[11px] text-zinc-400 font-normal mt-3">
+                <span>{note.pages} pages</span>
                 <span>•</span>
-                <span>💾 {note.fileSize}</span>
+                <span>{note.fileSize}</span>
                 <span>•</span>
-                <span>📥 {note.downloadCount} downloads</span>
+                <span>{note.downloadCount} downloads</span>
               </div>
 
             </div>
 
-            {/* Actions: Read & Download & Rate */}
-            <div className="pt-4 mt-4 border-t border-slate-100 flex items-center space-x-2">
+            {/* Actions */}
+            <div className="pt-4 mt-4 border-t border-white/10 flex items-center space-x-2.5">
               <button
                 onClick={() => setReadingNote(note)}
-                className="flex-1 flex items-center justify-center space-x-1.5 py-2.5 px-3 rounded-xl text-xs font-bold bg-indigo-50 hover:bg-indigo-100 text-indigo-700 transition active:scale-95"
+                className="flex-1 flex items-center justify-center space-x-1.5 py-2.5 px-3 rounded-full text-xs font-medium tactile-btn"
               >
                 <Eye className="w-3.5 h-3.5" />
                 <span>{t.readNote} & AI Digest</span>
@@ -203,7 +199,9 @@ export const NotesHub: React.FC<NotesHubProps> = ({
 
               <button
                 onClick={() => handleDownload(note)}
-                className="flex-1 flex items-center justify-center space-x-1.5 py-2.5 px-3 rounded-xl text-xs font-bold bg-slate-900 hover:bg-slate-800 text-white transition active:scale-95"
+                className={`flex-1 flex items-center justify-center space-x-1.5 py-2.5 px-3 rounded-full text-xs font-medium tactile-btn ${
+                  downloadSuccessNoteId === note.id ? 'tactile-btn-active' : ''
+                }`}
               >
                 {downloadSuccessNoteId === note.id ? (
                   <>
@@ -225,37 +223,36 @@ export const NotesHub: React.FC<NotesHubProps> = ({
 
       {/* Reader Modal with Embedded AI Explainer */}
       {readingNote && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in">
-          <div className="bg-white w-full max-w-2xl rounded-3xl p-6 shadow-2xl border border-slate-100 max-h-[85vh] flex flex-col relative space-y-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fade-in">
+          <div className="bg-zinc-950/90 backdrop-blur-xl w-full max-w-2xl rounded-3xl p-6 shadow-2xl border border-white/15 max-h-[85vh] flex flex-col relative space-y-4">
             
             <button
               onClick={() => setReadingNote(null)}
-              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100"
+              className="absolute top-4 right-4 p-2 text-zinc-400 hover:text-white rounded-full hover:bg-white/10"
             >
               <X className="w-5 h-5" />
             </button>
 
             <div className="pr-8">
-              <div className="text-xs font-bold uppercase tracking-wider text-indigo-600">
+              <div className="text-xs font-medium uppercase tracking-wider text-sky-300">
                 {readingNote.subject} • {readingNote.college}
               </div>
-              <h3 className="text-lg font-bold text-slate-900 mt-1">
+              <h3 className="text-lg font-semibold text-white mt-1">
                 {readingNote.title}
               </h3>
             </div>
 
-            {/* Smart AI Explainer & Exam Predictor embedded directly */}
             <AINoteExplainer note={readingNote} currentLang={currentLang} />
 
             {/* Note Full Content Body */}
-            <div className="flex-1 overflow-y-auto p-4 bg-slate-50 rounded-2xl border border-slate-200 font-mono text-xs text-slate-800 leading-relaxed whitespace-pre-wrap">
+            <div className="flex-1 overflow-y-auto p-4 glass-inner rounded-2xl font-mono text-xs text-zinc-200 leading-relaxed whitespace-pre-wrap">
               {readingNote.fullContent}
             </div>
 
             {/* Modal Bottom: Star Rating */}
-            <div className="pt-3 border-t border-slate-200 flex items-center justify-between">
+            <div className="pt-3 border-t border-white/10 flex items-center justify-between flex-wrap gap-2">
               <div className="flex items-center space-x-1.5">
-                <span className="text-xs font-bold text-slate-600 mr-2">Rate this note:</span>
+                <span className="text-xs font-medium text-zinc-300 mr-2">Rate this note:</span>
                 {[1, 2, 3, 4, 5].map((star) => (
                   <button
                     key={star}
@@ -269,7 +266,7 @@ export const NotesHub: React.FC<NotesHubProps> = ({
                       className={`w-5 h-5 ${
                         star <= Math.round(readingNote.rating)
                           ? 'fill-amber-400 text-amber-400'
-                          : 'text-slate-300'
+                          : 'text-zinc-600'
                       }`}
                     />
                   </button>
@@ -278,7 +275,7 @@ export const NotesHub: React.FC<NotesHubProps> = ({
 
               <button
                 onClick={() => handleDownload(readingNote)}
-                className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow transition"
+                className="px-4 py-2 rounded-full font-medium text-xs tactile-btn"
               >
                 Download Verified PDF
               </button>
@@ -304,7 +301,6 @@ export const NotesHub: React.FC<NotesHubProps> = ({
   );
 };
 
-// Subcomponent: Upload Note Modal
 const UploadModal: React.FC<{
   currentLang: Language;
   onClose: () => void;
@@ -345,20 +341,20 @@ const UploadModal: React.FC<{
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in">
-      <div className="bg-white w-full max-w-lg rounded-3xl p-6 shadow-2xl border border-slate-100 max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fade-in">
+      <div className="bg-zinc-950/90 backdrop-blur-xl w-full max-w-lg rounded-3xl p-6 shadow-2xl border border-white/15 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-bold text-slate-900">
+          <h3 className="text-lg font-semibold text-white">
             Share Your Study Notes
           </h3>
-          <button onClick={onClose} className="p-1 text-slate-400 hover:text-slate-600 rounded-full">
+          <button onClick={onClose} className="p-1 text-zinc-400 hover:text-white rounded-full">
             <X className="w-5 h-5" />
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
+            <label className="block text-xs font-medium text-zinc-300 uppercase mb-1">
               Title of Notes
             </label>
             <input
@@ -367,13 +363,13 @@ const UploadModal: React.FC<{
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="e.g. Web Development MERN Stack Unit 1-3 summary"
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+              className="w-full px-3.5 py-2.5 glass-inner rounded-xl text-xs font-normal text-white placeholder-zinc-500 focus:border-white/35 focus:outline-none"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
+              <label className="block text-xs font-medium text-zinc-300 uppercase mb-1">
                 Subject
               </label>
               <input
@@ -381,17 +377,17 @@ const UploadModal: React.FC<{
                 required
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                className="w-full px-3.5 py-2.5 glass-inner rounded-xl text-xs font-normal text-white focus:border-white/35 focus:outline-none"
               />
             </div>
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
+              <label className="block text-xs font-medium text-zinc-300 uppercase mb-1">
                 Language
               </label>
               <select
                 value={language}
                 onChange={(e) => setLanguage(e.target.value as Language)}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                className="w-full px-3.5 py-2.5 bg-zinc-900 border border-white/10 rounded-xl text-xs font-normal text-white focus:border-white/35 focus:outline-none"
               >
                 <option value="en">English</option>
                 <option value="kn">ಕನ್ನಡ (Kannada)</option>
@@ -401,7 +397,7 @@ const UploadModal: React.FC<{
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
+            <label className="block text-xs font-medium text-zinc-300 uppercase mb-1">
               Notes Text / Summary Preview
             </label>
             <textarea
@@ -410,13 +406,13 @@ const UploadModal: React.FC<{
               value={content}
               onChange={(e) => setContent(e.target.value)}
               placeholder="Paste formulas, key questions, solved problems, or module summary..."
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+              className="w-full px-3.5 py-2.5 glass-inner rounded-xl text-xs font-mono text-white placeholder-zinc-500 focus:border-white/35 focus:outline-none"
             />
           </div>
 
           <button
             type="submit"
-            className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-md transition active:scale-95"
+            className="w-full py-3 font-medium text-xs rounded-full tactile-btn"
           >
             Publish Verified Note
           </button>

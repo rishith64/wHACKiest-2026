@@ -1,25 +1,280 @@
 @import "tailwindcss";
 
+/* ==========================================
+   1. CSS VARIABLES
+========================================== */
+:root {
+  --text-primary: #ffffff;
+  --text-secondary: #a0c4ff;
+  --text-muted: #8899a6;
+}
+
+/* ==========================================
+   2. BASE STYLES
+========================================== */
 @layer base {
   body {
-    background-color: #f8fafc;
-    color: #0f172a;
+    background-color: #000000;
+    color: #f4f4f5;
     -webkit-tap-highlight-color: transparent;
   }
 }
 
-/* Custom scrollbars */
+/* ==========================================
+   3. TEXT UTILITIES
+========================================== */
+.text-primary {
+  color: var(--text-primary) !important;
+}
+
+.text-secondary {
+  color: var(--text-secondary) !important;
+}
+
+.text-muted {
+  color: var(--text-muted) !important;
+}
+
+/* ==========================================
+   4. GRID BACKGROUND LAYER (keeps grid behind cards)
+========================================== */
+.grid-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.app-content {
+  position: relative;
+  z-index: 10;
+}
+
+/* ==========================================
+   5. TRANSLUCENT GLASS BOX + CURSOR EDGE GLOW
+========================================== */
+.glass-box {
+  position: relative;
+  isolation: isolate;
+
+  /* frosted glass: opaque enough to look solid, blur diffuses the grid behind */
+  background: rgba(10, 10, 14, 0.78) !important;
+  backdrop-filter: blur(28px) saturate(160%);
+  -webkit-backdrop-filter: blur(28px) saturate(160%);
+
+  border: 1px solid rgba(255, 255, 255, 0.10) !important;
+  border-radius: 20px;
+
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+  color: #e4e4e7 !important;
+
+  transition:
+    background 0.25s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+/* ── Monochrome text palette ── */
+/* Titles / headings → bright white */
+.glass-box h1, .glass-box h2, .glass-box h3,
+.glass-box h4, .glass-box h5, .glass-box h6 {
+  color: #ffffff !important;
+}
+
+/* Body copy, spans, divs → soft light gray */
+.glass-box p,
+.glass-box span,
+.glass-box label,
+.glass-box div {
+  color: #d4d4d8 !important;
+}
+
+/* Muted / secondary labels → medium gray */
+.glass-box .text-zinc-400,
+.glass-box .text-zinc-500,
+.glass-box .text-zinc-600,
+.glass-box .text-zinc-300 {
+  color: #a1a1aa !important;
+}
+
+/* Strip all rainbow / colorful utility classes */
+.glass-box .text-sky-200,
+.glass-box .text-sky-300,
+.glass-box .text-sky-400,
+.glass-box .text-blue-400,
+.glass-box .text-emerald-300,
+.glass-box .text-emerald-400,
+.glass-box .text-amber-300,
+.glass-box .text-amber-400,
+.glass-box .text-rose-400,
+.glass-box .text-violet-400,
+.glass-box .text-cyan-400 {
+  color: #d4d4d8 !important;
+}
+
+/* Icons inside boxes — clean gray */
+.glass-box svg {
+  color: #a1a1aa !important;
+}
+
+/* Keep tactile buttons unaffected by the cascade above */
+.glass-box .tactile-btn span,
+.glass-box .tactile-btn div,
+.glass-box .tactile-btn svg {
+  color: inherit !important;
+}
+
+/* Dot indicators (scholarship / internship type dots) stay subtle */
+.glass-box span[class*="bg-emerald"],
+.glass-box span[class*="bg-sky"] {
+  background-color: #6b7280 !important;
+}
+
+/* ── Edge glow that follows cursor ── */
+.glass-box::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+
+  background: radial-gradient(
+    260px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(255, 255, 255, 0.90),
+    rgba(200, 220, 255, 0.30) 40%,
+    transparent 70%
+  );
+
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* soft inner ambient on hover */
+.glass-box::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    380px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(255, 255, 255, 0.05),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.glass-box:hover {
+  background: rgba(14, 14, 20, 0.86) !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+  box-shadow:
+    0 12px 36px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.glass-box:hover::before,
+.glass-box:hover::after {
+  opacity: 1;
+}
+
+/* ==========================================
+   6. INNER GLASS ELEMENTS
+========================================== */
+.glass-inner {
+  background: rgba(255, 255, 255, 0.055);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 12px;
+}
+
+/* ==========================================
+   7. TACTILE PILL BUTTONS
+========================================== */
+.tactile-btn {
+  position: relative;
+  background: linear-gradient(180deg,
+      rgba(255, 255, 255, 0.07) 0%,
+      rgba(255, 255, 255, 0.02) 100%);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow:
+    0 2px 10px rgba(0, 0, 0, 0.4),
+    0 0 0 3px rgba(255, 255, 255, 0.025),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.35);
+  color: #d4d4d8;
+  transition: all 0.24s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.tactile-btn:hover {
+  border-color: rgba(255, 255, 255, 0.72);
+  color: #ffffff;
+  background: linear-gradient(180deg,
+      rgba(255, 255, 255, 0.14) 0%,
+      rgba(255, 255, 255, 0.05) 100%);
+  box-shadow:
+    0 0 30px rgba(255, 255, 255, 0.28),
+    0 0 12px rgba(255, 255, 255, 0.32),
+    0 0 0 3px rgba(255, 255, 255, 0.09),
+    inset 0 1px 1px rgba(255, 255, 255, 0.48),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.35);
+}
+
+.tactile-btn:active {
+  transform: scale(0.97);
+}
+
+/* ==========================================
+   8. ACTIVE TACTILE BUTTON
+========================================== */
+.tactile-btn-active {
+  border-color: rgba(255, 255, 255, 0.65);
+  color: #ffffff;
+  background: linear-gradient(180deg,
+      rgba(255, 255, 255, 0.16) 0%,
+      rgba(255, 255, 255, 0.06) 100%);
+  box-shadow:
+    0 0 24px rgba(255, 255, 255, 0.22),
+    0 0 0 3px rgba(255, 255, 255, 0.08),
+    inset 0 1px 1px rgba(255, 255, 255, 0.42),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.35);
+}
+
+/* ==========================================
+   9. SCROLLBARS
+========================================== */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
+
 ::-webkit-scrollbar-track {
   background: transparent;
 }
+
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: rgba(255, 255, 255, 0.18);
   border-radius: 9999px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: rgba(255, 255, 255, 0.32);
 }

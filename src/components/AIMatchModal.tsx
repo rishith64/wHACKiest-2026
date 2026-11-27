@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Opportunity, StudentProfile, Language } from '../types';
-import { Sparkles, CheckCircle2, AlertCircle, ChevronDown, ChevronUp, Bot, BrainCircuit } from 'lucide-react';
+import React from 'react';
+import type { Opportunity, StudentProfile, Language } from '../types';
+import { Sparkles, CheckCircle2, BrainCircuit } from 'lucide-react';
 
 interface AIMatchModalProps {
   opportunity: Opportunity;
@@ -17,10 +17,6 @@ export const AIMatchModal: React.FC<AIMatchModalProps> = ({
   onClose,
   onSetReminder,
 }) => {
-  const [analyzing, setAnalyzing] = useState(false);
-  const [hasRun, setHasRun] = useState(true);
-
-  // Dynamic calculations based on real student profile parameters
   const isIncomeEligible = opportunity.type === 'scholarship'
     ? !profile.familyIncomeAnnual.includes('> ₹8.0')
     : true;
@@ -28,7 +24,6 @@ export const AIMatchModal: React.FC<AIMatchModalProps> = ({
   const isAcademicEligible = profile.cgpa >= 7.5;
   const matchScore = opportunity.matchScore || (isIncomeEligible && isAcademicEligible ? 96 : 84);
 
-  // Multilingual AI explanation text
   const getAnalysis = () => {
     if (currentLang === 'kn') {
       return {
@@ -66,74 +61,74 @@ export const AIMatchModal: React.FC<AIMatchModalProps> = ({
   const analysis = getAnalysis();
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in">
-      <div className="bg-white w-full max-w-lg rounded-3xl p-6 shadow-2xl border border-slate-100 max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fade-in">
+      <div className="bg-zinc-950/90 backdrop-blur-xl w-full max-w-lg rounded-3xl p-6 shadow-2xl border border-white/15 max-h-[90vh] overflow-y-auto">
         
         {/* Header */}
-        <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div className="flex items-center justify-between pb-3 border-b border-white/10">
           <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 rounded-xl bg-indigo-50 border border-indigo-200 text-indigo-600 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-xl glass-inner text-sky-300 flex items-center justify-center">
               <BrainCircuit className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-slate-900">
+              <h3 className="text-sm font-semibold text-white">
                 Sarvam & Gemini Eligibility Analysis
               </h3>
-              <p className="text-[11px] text-slate-500">
+              <p className="text-[11px] text-zinc-400">
                 Contextual matching against your student profile
               </p>
             </div>
           </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-sm font-bold">
+          <button onClick={onClose} className="text-zinc-400 hover:text-white text-sm font-bold p-1">
             ✕
           </button>
         </div>
 
         {/* Opportunity Card */}
-        <div className="mt-4 p-4 rounded-2xl bg-slate-50 border border-slate-200">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-600">
+        <div className="mt-4 p-4 rounded-2xl glass-inner">
+          <span className="text-[10px] font-medium uppercase tracking-wider text-sky-300">
             {opportunity.type}
           </span>
-          <h4 className="font-bold text-sm text-slate-900 mt-0.5">
+          <h4 className="font-semibold text-sm text-white mt-0.5">
             {opportunity.title[currentLang] || opportunity.title.en}
           </h4>
-          <p className="text-xs text-slate-500 mt-1">
-            Deadline: <strong className="text-slate-800">{opportunity.deadline}</strong> ({opportunity.daysLeft} days left)
+          <p className="text-xs text-zinc-400 mt-1">
+            Deadline: <span className="text-zinc-100">{opportunity.deadline}</span> ({opportunity.daysLeft} days left)
           </p>
         </div>
 
         {/* AI Match Gauge */}
-        <div className="mt-4 p-4 rounded-2xl bg-gradient-to-r from-indigo-50 to-emerald-50 border border-indigo-100 flex items-center justify-between">
+        <div className="mt-4 p-4 rounded-2xl glass-inner flex items-center justify-between">
           <div>
-            <div className="text-[11px] font-bold text-indigo-700 uppercase tracking-wider">
+            <div className="text-[11px] font-medium text-sky-300 uppercase tracking-wider">
               AI Match Verdict
             </div>
-            <div className="text-base font-black text-slate-900 mt-0.5">
+            <div className="text-base font-semibold text-white mt-0.5">
               {analysis.verdict}
             </div>
           </div>
-          <div className="w-14 h-14 rounded-2xl bg-white shadow-sm border border-emerald-200 flex flex-col items-center justify-center text-emerald-600">
-            <span className="text-base font-black leading-none">{matchScore}%</span>
-            <span className="text-[9px] font-bold text-slate-400 mt-0.5">Fit</span>
+          <div className="w-14 h-14 rounded-2xl bg-black/40 border border-emerald-400/35 flex flex-col items-center justify-center text-emerald-300">
+            <span className="text-base font-bold leading-none">{matchScore}%</span>
+            <span className="text-[9px] font-medium text-zinc-400 mt-0.5">Fit</span>
           </div>
         </div>
 
         {/* Breakdown Points */}
         <div className="mt-4 space-y-2">
-          <div className="text-xs font-bold uppercase tracking-wider text-slate-600">
+          <div className="text-xs font-medium uppercase tracking-wider text-zinc-400">
             Why you qualify:
           </div>
           {analysis.reasons.map((r, i) => (
-            <div key={i} className="flex items-start space-x-2 text-xs text-slate-700 bg-white p-2.5 rounded-xl border border-slate-100">
-              <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5" />
+            <div key={i} className="flex items-start space-x-2 text-xs text-zinc-200 glass-inner p-2.5 rounded-xl">
+              <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
               <span>{r}</span>
             </div>
           ))}
         </div>
 
-        {/* AI Tip / Action */}
-        <div className="mt-4 p-3.5 rounded-2xl bg-amber-50 border border-amber-200/80 text-xs text-amber-900">
-          <div className="font-bold flex items-center space-x-1.5 mb-1 text-amber-800">
+        {/* AI Tip */}
+        <div className="mt-4 p-3.5 rounded-2xl glass-inner text-xs text-zinc-300">
+          <div className="font-medium flex items-center space-x-1.5 mb-1 text-sky-200">
             <Sparkles className="w-3.5 h-3.5" />
             <span>AI Actionable Recommendation:</span>
           </div>
@@ -141,13 +136,13 @@ export const AIMatchModal: React.FC<AIMatchModalProps> = ({
         </div>
 
         {/* Footer Actions */}
-        <div className="mt-5 pt-3 border-t border-slate-100 flex items-center space-x-2">
+        <div className="mt-5 pt-3 border-t border-white/10 flex items-center space-x-2.5">
           <button
             onClick={() => {
               onClose();
               onSetReminder(opportunity);
             }}
-            className="flex-1 py-2.5 px-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow transition"
+            className="flex-1 py-2.5 px-3 font-medium text-xs rounded-full tactile-btn"
           >
             Set Custom Reminder
           </button>
@@ -155,7 +150,7 @@ export const AIMatchModal: React.FC<AIMatchModalProps> = ({
             href={opportunity.officialLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex-1 text-center py-2.5 px-3 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl transition"
+            className="flex-1 text-center py-2.5 px-3 font-medium text-xs rounded-full tactile-btn"
           >
             Apply on Official Portal
           </a>
@@ -165,4 +160,3 @@ export const AIMatchModal: React.FC<AIMatchModalProps> = ({
     </div>
   );
 };
-
